@@ -1,7 +1,8 @@
-﻿using SmallShop.Domain.ProductAgg;
+﻿using NSubstitute;
+using SmallShop.Domain.ProductAgg;
 using SmallShop.Domain.ProductAgg.Services;
 
-namespace Academy.Domain.Tests.Unit.Builders
+namespace SmallShop.Domain.Tests.Unit.Builders
 {
     public class TestProductBuilder
     {
@@ -12,7 +13,14 @@ namespace Academy.Domain.Tests.Unit.Builders
         private string _manufacturerPhoneNumber = "09123456789";
         private bool _isAvailable = true;
         private Guid _userId = Guid.NewGuid();
+        private IProductDomainService _productDomainService;
 
+        public TestProductBuilder()
+        {
+            _productDomainService = NSubstitute.Substitute.For<IProductDomainService>();
+            _productDomainService.ProductExists(Arg.Any<string>(), Arg.Any<DateOnly>())
+                 .Returns(false);
+        }
         public TestProductBuilder WithName(string name)
         {
             _name = name;
@@ -45,10 +53,10 @@ namespace Academy.Domain.Tests.Unit.Builders
             return this;
         }
 
-        public Product Build(IProductDomainService productDomainService)
+        public Product Build(IProductDomainService? productDomainService)
         {
             return new Product(_name,_manufacturerEmail,_productionDate,_manufacturerPhoneNumber,
-                _isAvailable,_userId, productDomainService);
+                _isAvailable,_userId, productDomainService?? _productDomainService);
         }
     }
 }

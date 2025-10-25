@@ -1,4 +1,3 @@
-using Academy.Domain.Tests.Unit.Builders;
 using FluentAssertions;
 using NSubstitute;
 using SmallShop.Domain.Common.ValueObjects;
@@ -6,6 +5,7 @@ using SmallShop.Domain.ProductAgg;
 using SmallShop.Domain.ProductAgg.Services;
 using System.Xml.Linq;
 using SmallShop.Domain.ProductAgg.Exceptions;
+using SmallShop.Domain.Tests.Unit.Builders;
 
 
 namespace SmallShop.Domain.Tests.Unit.ProductAgg
