@@ -1,5 +1,6 @@
 ﻿using NSubstitute;
 using SmallShop.Application.Products.Delete;
+using SmallShop.Contracts.Logging;
 using SmallShop.Contracts.Persistence;
 using SmallShop.Domain.ProductAgg;
 using SmallShop.Domain.ProductAgg.Services;
@@ -21,13 +22,14 @@ namespace SmallShop.Application.Tests.Unit.Products
         {
             var productDomainServcie = Substitute.For<IProductDomainService>();
             _repository = Substitute.For<IProductRepository>();
+            var logger = Substitute.For<IAppLogger<DeleteProductCommandHandler>>();
 
             _product = new TestProductBuilder().Build(null);
 
             _repository.GetTracking(Arg.Any<Guid>())
                 .Returns(Task.FromResult(_product));
 
-            _handler = new DeleteProductCommandHandler(_repository);
+            _handler = new DeleteProductCommandHandler(_repository, logger);
 
         }
 
