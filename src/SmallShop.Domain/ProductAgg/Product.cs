@@ -12,8 +12,6 @@ namespace SmallShop.Domain.ProductAgg
 {
     public class Product : AggregateRoot
     {
-
-        public Guid Id { get; private set; }
         public string Name { get; private set; }
         public Email ManufacturerEmail { get; private set; }
         public PhoneNumber ManufacturerPhoneNumber { get; private set; }
