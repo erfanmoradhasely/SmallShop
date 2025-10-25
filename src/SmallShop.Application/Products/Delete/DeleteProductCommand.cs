@@ -11,6 +11,6 @@ namespace SmallShop.Application.Products.Delete
     {
         public Guid Id { get; set; }
         //to be set in the api
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
     }
 }

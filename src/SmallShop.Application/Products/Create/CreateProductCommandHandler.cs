@@ -5,7 +5,7 @@ using SmallShop.Domain.ProductAgg.Services;
 
 namespace SmallShop.Application.Products.Create
 {
-    internal class CreateProductCommandHandler : IBaseCommandHandler<CreateProductCommand>
+    internal class CreateProductCommandHandler : IBaseCommandHandler<CreateProductCommand,Guid>
     {
         private readonly IProductDomainService _productDomainService;
         private readonly IProductRepository _productRepository;
@@ -16,16 +16,16 @@ namespace SmallShop.Application.Products.Create
             _productRepository = productRepository;
         }
 
-        public async Task<OperationResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult<Guid>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             var product = new Product(request.Name, request.ManufacturerEmail, request.ProductionDate
-                , request.ManufacturerPhoneNumber, request.IsAvailable, request.UserId, _productDomainService);
+                , request.ManufacturerPhoneNumber, request.IsAvailable, request.UserId.Value, _productDomainService);
 
             _productRepository.Add(product);
 
             await _productRepository.Save();
 
-            return OperationResult.Success();
+            return OperationResult<Guid>.Success(product.Id);
         }
     }
 }

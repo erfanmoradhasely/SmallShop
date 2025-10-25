@@ -14,7 +14,7 @@ public static class PersistenceServiceRegistration
         IConfiguration configuration)
     {
         services.AddDbContext<SmallShopContext>(options => {
-            options.UseSqlServer(configuration.GetConnectionString("HrDatabaseConnectionString"));
+            options.UseSqlServer(configuration.GetConnectionString("SmallShopDb"));
         });
 
         services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));

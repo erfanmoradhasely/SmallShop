@@ -31,7 +31,7 @@ namespace SmallShop.Application.Products.Delete
                 return OperationResult.NotFound();
             }
 
-            product.CanBeDeletedOrUpdatedBy(request.UserId);
+            product.CanBeDeletedOrUpdatedBy(request.UserId.Value);
 
             _productRepository.Delete(product);
 

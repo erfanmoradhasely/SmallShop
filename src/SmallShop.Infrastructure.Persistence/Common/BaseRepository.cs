@@ -39,7 +39,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     }
     public void Update(TEntity entity)
     {
-        _context.Update(entity);
+        _context.Entry(entity).State = EntityState.Modified;
     }
     public void Delete(TEntity entity)
     {

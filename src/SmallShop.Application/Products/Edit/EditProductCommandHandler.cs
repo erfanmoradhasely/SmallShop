@@ -32,7 +32,7 @@ namespace SmallShop.Application.Products.Edit
 
 
             await product.Edit(request.Name, request.ManufacturerEmail, request.ProductionDate,
-                request.ManufacturerPhoneNumber, request.IsAvailable, request.UserId, _productDomainService);
+                request.ManufacturerPhoneNumber, request.IsAvailable, request.UserId.Value, _productDomainService);
 
             await _productRepository.Save();
 

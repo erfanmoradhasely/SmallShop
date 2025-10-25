@@ -11,9 +11,11 @@ namespace SmallShop.Application;
 
 public static class QueryServiceRegistration
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddQueryServices(this IServiceCollection services)
     {
         services.AddAutoMapper(_ => { }, Assembly.GetExecutingAssembly());
+        services.AddMediatR(cfg =>
+        cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         return services;
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -26,10 +27,28 @@ namespace SmallShop.Infrastructure.Identity
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
 
             services.AddDbContext<SmallShopIdentityDbContext>(options =>
-               options.UseSqlServer(configuration.GetConnectionString("SmallShopDb")));
+            {
+                options.UseSqlServer(configuration.GetConnectionString("SmallShopDb"));
+                options.ConfigureWarnings(x => x.Ignore(RelationalEventId.PendingModelChangesWarning));
+
+            });
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
-                .AddEntityFrameworkStores<SmallShopIdentityDbContext>().AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<SmallShopIdentityDbContext>()
+                .AddDefaultTokenProviders()
+                .AddErrorDescriber<CustomIdentityError>();
+
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 5;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+            });
+
 
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IUserService, UserService>();

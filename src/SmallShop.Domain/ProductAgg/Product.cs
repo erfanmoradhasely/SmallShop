@@ -19,10 +19,13 @@ namespace SmallShop.Domain.ProductAgg
         public bool IsAvailable { get; private set; }
         public Guid UserId { get; private set; }
 
+        public Product()
+        {
 
-        public Product(string name, Email manufacturerEmail,DateOnly productionDate,
+        }
+        public Product(string name, Email manufacturerEmail, DateOnly productionDate,
             PhoneNumber manufacturerPhoneNumber, bool isAvailable, Guid userId
-            ,IProductDomainService productDomainService)
+            , IProductDomainService productDomainService)
         {
             GuardAgainstDuplicateProduct(manufacturerEmail, productionDate, productDomainService).GetAwaiter().GetResult();
 
@@ -38,7 +41,8 @@ namespace SmallShop.Domain.ProductAgg
             PhoneNumber manufacturerPhoneNumber, bool isAvailable, Guid userId
             , IProductDomainService productDomainService)
         {
-            await GuardAgainstDuplicateProduct(manufacturerEmail, productionDate, productDomainService);
+            if (manufacturerEmail != ManufacturerEmail || productionDate != ProductionDate)
+                await GuardAgainstDuplicateProduct(manufacturerEmail, productionDate, productDomainService);
             GuardAgainstWrongUserId(userId);
 
             Name = name;
@@ -62,10 +66,10 @@ namespace SmallShop.Domain.ProductAgg
         private void GuardAgainstWrongUserId(Guid userId)
         {
             if (UserId != userId)
-             throw new InvalidUserDomainDataException();
+                throw new InvalidUserDomainDataException();
         }
         private async Task GuardAgainstDuplicateProduct(string manufacturerEmail, DateOnly productionDate
-            ,IProductDomainService productDomainService)
+            , IProductDomainService productDomainService)
         {
             if (await productDomainService.ProductExists(manufacturerEmail, productionDate))
                 throw new DuplicateProductDomainDataException("محصول با این ایمیل تولید کننده و تاریخ قبلا ایجاد شده است");

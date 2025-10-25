@@ -13,6 +13,6 @@ namespace SmallShop.Application.Products.Edit
         public DateOnly ProductionDate { get; set; }
         public bool IsAvailable { get; set; }
         //to be set in the api
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
     }
 }

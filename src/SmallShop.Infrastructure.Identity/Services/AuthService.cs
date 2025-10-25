@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SmallShop.Contracts.Identity;
 using SmallShop.Contracts.Identity.Models;
+using SmallShop.Infrastructure.Identity.Exceptions;
 using SmallShop.Infrastructure.Identity.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -31,14 +32,14 @@ namespace SmallShop.Infrastructure.Identity.Services
 
             if (user == null)
             {
-                //throw new NotFoundException($"User with {request.Email} not found.", request.Email);
+                throw new NotFoundException($"کاربر {request.Email} پیدا نشد.", request.Email);
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
             if (result.Succeeded == false)
             {
-                //throw new BadRequestException($"Credentials for '{request.Email} aren't valid'.");
+                throw new BadRequestException($"رمز عبور یا نام کاربری مادرست است");
             }
 
             JwtSecurityToken jwtSecurityToken = await GenerateToken(user);
@@ -80,8 +81,7 @@ namespace SmallShop.Infrastructure.Identity.Services
                     str.AppendFormat("•{0}\n", err.Description);
                 }
 
-                throw new Exception();
-                //throw new BadRequestException($"{str}");
+                throw new BadRequestException($"{str}");
             }
         }
 
@@ -92,10 +92,9 @@ namespace SmallShop.Infrastructure.Identity.Services
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("uid", user.Id.ToString())
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             }
             .Union(userClaims);
 

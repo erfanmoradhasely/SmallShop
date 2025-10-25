@@ -1,11 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using SmallShop.Domain.Common.ValueObjects;
 using SmallShop.Domain.ProductAgg;
 
 namespace SmallShop.Infrastructure.Persistence.ProductAgg;
 
 public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
+    private ValueConverter emailConverter = new ValueConverter<Email, string>(t => t.Value, t => new Email(t));
+    private ValueConverter phoneNumberConverter = new ValueConverter<PhoneNumber, string>(t => t.Value, t => new PhoneNumber(t));
+
     public void Configure(EntityTypeBuilder<Product> builder)
     {
         builder.ToTable("Products", "product");
@@ -20,28 +25,24 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(b => b.ProductionDate)
             .IsRequired();
 
-
-        builder.OwnsOne(b => b.ManufacturerPhoneNumber, option =>
-        {
-            option.Property(b => b.Value)
-                  .IsRequired()
-                  .HasMaxLength(11)
-                  .IsUnicode(false)
-                  .HasColumnName("ManufacturerPhoneNumber");
-
-        });
-
-        builder.OwnsOne(b => b.ManufacturerEmail, option =>
-        {
-            option.Property(b => b.Value)
+        //builder.Property<string>("ManufacturerEmail");
+        builder.Property(b => b.ManufacturerEmail)
+            .HasConversion(emailConverter)
+            .HasColumnName("ManufacturerEmail")
                   .IsRequired()
                   .HasMaxLength(200)
-                  .IsUnicode(false)
-                  .HasColumnName("ManufacturerPhoneNumber");
+                  .IsUnicode(false);
 
-        });
+        builder.Property(b => b.ManufacturerPhoneNumber)
+            .HasConversion(phoneNumberConverter)
+             .HasColumnName("ManufacturerPhoneNumber")
+                  .IsRequired()
+                  .HasMaxLength(11)
+                  .IsUnicode(false);
+                 
 
-        builder.HasIndex(b => new { b.ProductionDate, b.ManufacturerEmail }).IsUnique();
+
+        builder.HasIndex("ProductionDate", "ManufacturerEmail");
 
     }
 }

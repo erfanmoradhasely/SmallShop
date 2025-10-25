@@ -8,7 +8,7 @@ namespace SmallShop.Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
-            services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
+            services.AddTransient(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             return services;
         }
     }

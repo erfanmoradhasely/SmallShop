@@ -20,7 +20,7 @@ namespace SmallShop.Infrastructure.Identity.Services
             _contextAccessor = contextAccessor;
         }
 
-        public string UserId { get => _contextAccessor.HttpContext?.User?.FindFirstValue("uid"); }
+        public string UserId { get => _contextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier); }
 
         public async Task<User> GetUser(string userId)
         {

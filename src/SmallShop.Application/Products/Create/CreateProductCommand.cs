@@ -3,7 +3,7 @@ using SmallShop.Domain.Common.ValueObjects;
 
 namespace SmallShop.Application.Products.Create;
 
-public class CreateProductCommand : IBaseCommand
+public class CreateProductCommand : IBaseCommand<Guid>
 {
     public string Name { get; set; }
     public string ManufacturerEmail { get; set; }
@@ -11,6 +11,6 @@ public class CreateProductCommand : IBaseCommand
     public DateOnly ProductionDate { get; set; }
     public bool IsAvailable { get; set; }
     //to be set in the api
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
 
 }
