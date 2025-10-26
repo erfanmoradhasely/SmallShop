@@ -14,7 +14,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080;https://+:8081
-      - ConnectionStrings__SmallShopDb=Server=db;Database=SmallShop;User Id=sa;Password=@123456;TrustServerCertificate=True;
     depends_on:
       - db 
 
@@ -23,7 +22,7 @@ services:
     container_name: sqlserver2022
     image: mcr.microsoft.com/mssql/server:2022-latest  
     ports:
-      - "1433:1433" 
+      - "14333:1433" 
     networks:
       - testNetwork
     environment:
