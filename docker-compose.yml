@@ -1,0 +1,38 @@
+services:
+  # .NET Application Service
+  webbapi:
+    container_name: smallShopContainer
+    image: small-shop-image  
+    build:
+      context: .
+      dockerfile: src/SmallShop.Presentation.Api/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081" 
+    networks:
+      - testNetwork
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080;https://+:8081
+      - ConnectionStrings__SmallShopDb=Server=db;Database=SmallShop;User Id=sa;Password=@123456;TrustServerCertificate=True;
+    depends_on:
+      - db 
+
+  # SQL Server Service
+  db:
+    container_name: sqlserver2022
+    image: mcr.microsoft.com/mssql/server:2022-latest  
+    ports:
+      - "1433:1433" 
+    networks:
+      - testNetwork
+    environment:
+      - ACCEPT_EULA=Y  
+      - SA_PASSWORD=jF@bekn123456
+    volumes:
+      - sql_data:/var/opt/mssql 
+
+networks:
+  testNetwork:
+volumes:
+  sql_data:

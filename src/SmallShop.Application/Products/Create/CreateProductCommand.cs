@@ -10,7 +10,9 @@ public class CreateProductCommand : IBaseCommand<Guid>
     public string ManufacturerPhoneNumber { get; set; }
     public DateOnly ProductionDate { get; set; }
     public bool IsAvailable { get; set; }
-    //to be set in the api
+    /// <summary>
+    /// to be set in the api
+    /// </summary>
     public Guid? UserId { get; set; }
 
 }

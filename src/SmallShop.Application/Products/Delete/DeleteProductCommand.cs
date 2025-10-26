@@ -10,7 +10,9 @@ namespace SmallShop.Application.Products.Delete
     public class DeleteProductCommand : IBaseCommand
     {
         public Guid Id { get; set; }
-        //to be set in the api
+        /// <summary>
+        /// to be set in the api
+        /// </summary>
         public Guid? UserId { get; set; }
     }
 }
